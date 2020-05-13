@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">युबम गो</string>
+
+    <string name="bus_stand">बस स्ट्यान्ड</string>
+    <string name="welcome_text">युबम गोमा स्वागत छ</string>
+    <string name="email">ईमेल</string>
+    <string name="password">पासवर्ड</string>
+    <string name="remember">मलाई सम्झनुहोस्</string>
+    <string name="forgot_password">पासवर्ड भुल्नु भयो?</string>
+    <string name="login">लगईन</string>
+    <string name="no_account">खाता छैन?</string>
+    <string name="signup">साइन अप</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="open">खोल्नुहोस्</string>
+    <string name="close">बन्द</string>
+    <string name="title_activity_dashboard">DashboardActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_logout">बाहिर निस्कनु</string>
+
+    <string name="menu_home">घर</string>
+    <string name="menu_gallery">ग्यालरी</string>
+    <string name="menu_slideshow">स्लाइडर</string>
+
+    <string name="home_second">Home Second</string>
+
+    <string name="resetPassword">पासवर्ड रिसेट</string>
+    <string name="forgot_password_text">सजिलो छ । केवल ईमेल टाइप गर्नुहोस् र पठाउनुहोस् ।</string>
+
+
+    <string name="create_account_with">खाता खोल्नुहोस्</string>
+    <string name="sign_to_agree">लगइन क्लिक गरेर, तपाईं हाम्रो नियम र सर्तहरू स्वीकार गर्दै हुनुहुन्छ</string>
+    <string name="login_with_facebook">फेसबुकबाट लगइन</string>
+
+    <string name="newbooking">नयाँ बुकिंग</string>
+    <string name="from">कहाँ बाट</string>
+    <string name="to">कहाँ सम्म</string>
+    <string name="choose_date">मिति छान्नु होस्</string>
+    <string name="choose_seat_text">सीट छनौट गर्नुहोस्</string>
+    <string name="select_place">ठाउँ छनौट गर्नुहोस्</string>
+    <string name="date_of_journey">प्रस्थान मिति</string>
+    <string name="submit">बुझाउनुहोस्</string>
+
+</resources>

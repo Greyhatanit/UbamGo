@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#fc5a58</color>
+
+    <color name="lightgray">#ededed</color>
+    <color name="purple">#7c4dff</color>
+    <color name="yellow">#ffb300</color>
+
+    <color name="iconColor">#ff5756</color>
+
+    <color name="blueColor">#0676fe</color>
+    <color name="facebook_logo">#1877F2</color>
+
+    <color name="green">#caf5cd</color>
+    <color name="cyan">#cae5f5</color>
+</resources>

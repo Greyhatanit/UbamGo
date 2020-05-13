@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_default">10dp</dimen>
+    <dimen name="margin_short">8dp</dimen>
+    <dimen name="padding_default">8dp</dimen>
+    <dimen name="padding_small">5dp</dimen>
+    <dimen name="margin_shorter">5dp</dimen>
+    <dimen name="margin_left">3dp</dimen>
+    <!-- for mobile screens -->
+</resources>

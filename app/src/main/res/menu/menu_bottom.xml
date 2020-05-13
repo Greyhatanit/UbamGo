@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_home"
+        android:title="@string/menu_home" />
+
+    <item
+        android:id="@+id/notificationFragment"
+        android:title="Notification"
+        android:icon="@drawable/ic_notifications"/>
+
+    <item
+        android:id="@+id/inviteEarnFragment"
+        android:title="Invite&amp;Earn"
+        android:icon="@drawable/ic_group"/>
+
+    <item
+        android:id="@+id/settingFragment"
+        android:title="Setting"
+        android:icon="@drawable/ic_settings"/>
+</menu>

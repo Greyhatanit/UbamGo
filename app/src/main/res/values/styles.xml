@@ -1,0 +1,35 @@
+<resources>
+
+    <!--Base Application Theme-->
+    <style name="AppMaterialTheme" parent="SuperMaterialTheme">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="SuperMaterialTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Parent theme for all Pre-Lollipop and Lollipop above versions i.e. For all devices. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="colorControlHighlight">#0676fe</item>
+        <item name="colorButtonNormal">#0676fe</item>
+        <item name="colorControlActivated">#0676fe</item>
+    </style>
+
+    <style name="AppMaterialTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Parent theme for all Pre-Lollipop and Lollipop above versions i.e. For all devices. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- Splash Screen theme. -->
+    <style name="SplashScreen" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppMaterialTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppMaterialTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

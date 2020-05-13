@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppMaterialTheme" parent="SuperMaterialTheme">
+        <!-- Customise for all only Lollipop and Above Verions features. -->
+    </style>
+</resources>
