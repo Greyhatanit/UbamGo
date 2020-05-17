@@ -6,15 +6,19 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.asyantech.ubamgo.login.LoginActivity;
 import com.asyantech.ubamgo.seatbooking.SeatBookingActivity;
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -29,6 +33,10 @@ public class DashboardActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     FirebaseAuth firebaseAuth;
+
+    ImageView profileImageView;
+    TextView profileTextView;
+    TextView profileEmailTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +68,38 @@ public class DashboardActivity extends AppCompatActivity {
         //Bottom Navigation View
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_item);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+        View navHeaderView = navigationView.getHeaderView(0);
+
+        profileImageView = (ImageView) navHeaderView.findViewById(R.id.profileImageView);
+        profileTextView = (TextView) navHeaderView.findViewById(R.id.profileTextView);
+        profileEmailTextView = (TextView) navHeaderView.findViewById(R.id.profileEmailTextView);
+        //loadUserInformation();
+
     }
+
+    /*
+    private void loadUserInformation(){
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if(user != null){
+
+            if(user.getPhotoUrl() != null){
+                Glide.with(this)
+                        .load(user.getPhotoUrl().toString())
+                        .into(profileImageView);
+            }
+
+
+            if(user.getDisplayName() != null){
+                profileTextView.setText(user.getDisplayName());
+            }
+
+            if(user.getEmail() != null){
+                profileEmailTextView.setText(user.getEmail());
+            }
+        }
+    }
+    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

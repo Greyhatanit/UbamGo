@@ -5,11 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.asyantech.ubamgo.R;
-
 import java.util.List;
 
 public class AirplaneAdapter extends SelectableAdapter<RecyclerView.ViewHolder> {
@@ -17,18 +14,14 @@ public class AirplaneAdapter extends SelectableAdapter<RecyclerView.ViewHolder> 
     private OnSeatSelected mOnSeatSelected;
 
     private static class EdgeViewHolder extends RecyclerView.ViewHolder {
-
         ImageView imgSeat;
         private final ImageView imgSeatSelected;
-
 
         public EdgeViewHolder(View itemView) {
             super(itemView);
             imgSeat = (ImageView) itemView.findViewById(R.id.img_seat);
             imgSeatSelected = (ImageView) itemView.findViewById(R.id.img_seat_selected);
-
         }
-
     }
 
     private static class CenterViewHolder extends RecyclerView.ViewHolder {
@@ -40,14 +33,11 @@ public class AirplaneAdapter extends SelectableAdapter<RecyclerView.ViewHolder> 
             super(itemView);
             imgSeat = (ImageView) itemView.findViewById(R.id.img_seat);
             imgSeatSelected = (ImageView) itemView.findViewById(R.id.img_seat_selected);
-
-
         }
 
     }
 
     private static class EmptyViewHolder extends RecyclerView.ViewHolder {
-
         public EmptyViewHolder(View itemView) {
             super(itemView);
         }
@@ -114,16 +104,12 @@ public class AirplaneAdapter extends SelectableAdapter<RecyclerView.ViewHolder> 
             holder.imgSeat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    toggleSelection(position);
-                    mOnSeatSelected.onSeatSelected(getSelectedItemCount());
-
-
+                toggleSelection(position);
+                mOnSeatSelected.onSeatSelected(getSelectedItemCount());
                 }
             });
 
             holder.imgSeatSelected.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
-
         }
     }
 

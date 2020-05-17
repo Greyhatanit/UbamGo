@@ -110,6 +110,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
                                             Toast.makeText(SignUpActivity.this, "Uploaded with DocumentSnapshot added with ID: " + documentReference.getId(), Toast.LENGTH_SHORT).show();
+                                            finish();
                                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                                         }
                                     })
@@ -131,6 +132,7 @@ public class SignUpActivity extends AppCompatActivity {
         loginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
         });

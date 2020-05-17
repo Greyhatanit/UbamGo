@@ -45,8 +45,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppMaterialTheme">
 
-        <activity android:name=".seatbooking.ChooseSeatActivity"></activity>
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -69,7 +67,13 @@
         </activity> <!-- Our Activity -->
         <activity
             android:name=".splashscreen.SplashScreen"
-            android:theme="@style/SplashScreen"></activity>
+            android:theme="@style/SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".login.LoginActivity"></activity>
         <activity
             android:name=".login.SignUpActivity"
@@ -77,15 +81,12 @@
         <activity
             android:name=".DashboardActivity"
             android:theme="@style/AppMaterialTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".seatbooking.SeatBookingActivity"
             android:parentActivityName=".DashboardActivity" />
+
+        <activity android:name=".seatbooking.ChooseSeatActivity"></activity>
 
         <meta-data
             android:name="android.max_aspect"

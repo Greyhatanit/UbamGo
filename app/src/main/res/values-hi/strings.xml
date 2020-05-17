@@ -46,5 +46,6 @@
     <string name="select_place">ठाउँ छनौट गर्नुहोस्</string>
     <string name="date_of_journey">प्रस्थान मिति</string>
     <string name="submit">बुझाउनुहोस्</string>
+    <string name="login_with_google">Login with Google</string>
 
 </resources>

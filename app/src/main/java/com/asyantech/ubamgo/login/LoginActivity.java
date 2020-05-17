@@ -33,6 +33,12 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,6 +48,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -62,6 +69,11 @@ public class LoginActivity extends AppCompatActivity{
     //Facebook login
     private CallbackManager callbackManager;
     private Button facebookLoginButton;
+
+    //Google Login
+    private SignInButton signInButton;
+    private GoogleSignInClient mGoogleSignInClient;
+    private int RC_SIGN_IN = 1;
 
     //Firestore
     FirebaseAuth firebaseAuth;
@@ -95,6 +107,7 @@ public class LoginActivity extends AppCompatActivity{
         go_to_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
                 startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
             }
         });
@@ -182,6 +195,7 @@ public class LoginActivity extends AppCompatActivity{
                         public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             progressBar.setVisibility(View.GONE);
+                            finish();
                             // Sign in success, update UI with the signed-in user's information
                             Toast.makeText(LoginActivity.this, "Authentication Successful.",
                                     Toast.LENGTH_SHORT).show();
@@ -240,7 +254,65 @@ public class LoginActivity extends AppCompatActivity{
                 });
             }
         });
+
+        //Google Sign In
+        signInButton = findViewById(R.id.google_login);
+        firebaseAuth = FirebaseAuth.getInstance();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signIn();
+            }
+        });
     }
+
+    void signIn(){
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                Toast.makeText(this, "Signed In Successfully", Toast.LENGTH_SHORT).show();
+                FirebaseGoogleAuth(account);
+            } catch (ApiException e) {
+                Toast.makeText(this, "Could not Sign In", Toast.LENGTH_SHORT).show();
+                FirebaseGoogleAuth(null);
+            }
+        }
+    }
+
+    private void FirebaseGoogleAuth(GoogleSignInAccount acct){
+        AuthCredential authCredential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        firebaseAuth.signInWithCredential(authCredential)
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()){
+                        Toast.makeText(LoginActivity.this, "Signed In Successfully", Toast.LENGTH_SHORT).show();
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        updateUI(user);
+                    }else{
+                        Toast.makeText(LoginActivity.this, "Could not Sign In", Toast.LENGTH_SHORT).show();
+                        updateUI(null);
+                    }
+                }
+            });
+    }
+
 
     private void handleFacebookAccessToken(final AccessToken token) {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -262,6 +334,9 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void updateUI(FirebaseUser user) {
+
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+
         if(user != null) {
             String user_id = user.getUid();
             String photoUrl = user.getPhotoUrl().toString();
@@ -361,15 +436,13 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+        if(firebaseAuth.getCurrentUser() != null){
+            finish();
+            startActivity(new Intent(this, DashboardActivity.class));
+        }
 
     }
 }

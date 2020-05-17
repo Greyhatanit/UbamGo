@@ -47,5 +47,6 @@
     <string name="select_place">Select Place</string>
     <string name="date_of_journey">Date of Journey</string>
     <string name="submit">Submit</string>
+    <string name="login_with_google">Login with Google</string>
 
 </resources>

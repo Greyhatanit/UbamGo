@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +24,7 @@ public class ChooseSeatActivity extends AppCompatActivity implements OnSeatSelec
 
     private static final int COLUMNS = 5;
     private TextView txtSeatSelected;
-    private Button submitCloud;
+    private int no_of_selected_seat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,6 @@ public class ChooseSeatActivity extends AppCompatActivity implements OnSeatSelec
         setContentView(R.layout.activity_choose_seat);
 
         txtSeatSelected = (TextView)findViewById(R.id.txt_seat_selected);
-        submitCloud = (Button) findViewById(R.id.submit_cloud);
 
         List<AbstractItem> items = new ArrayList<>();
         for (int i=0; i<30; i++) {
@@ -52,18 +50,20 @@ public class ChooseSeatActivity extends AppCompatActivity implements OnSeatSelec
 
         AirplaneAdapter adapter = new AirplaneAdapter(this, items);
         recyclerView.setAdapter(adapter);
-
-        submitCloud.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ChooseSeatActivity.this, "Submit Cloud Button", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
     public void onSeatSelected(int count) {
-
+        no_of_selected_seat = count;
         txtSeatSelected.setText("Book "+count+" seats");
+        txtSeatSelected.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int cost_per_seat = 1000;
+                int total_cost_selected_seat = cost_per_seat * no_of_selected_seat;
+                Toast.makeText(ChooseSeatActivity.this, "Total price to be paid "+total_cost_selected_seat, Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 }
