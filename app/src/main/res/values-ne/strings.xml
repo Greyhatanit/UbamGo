@@ -3,7 +3,7 @@
     <string name="app_name">युबम गो</string>
 
     <string name="bus_stand">बस स्ट्यान्ड</string>
-    <string name="welcome_text">युबम गोमा स्वागत छ</string>
+    <string name="welcome_text">युबम गोमा स्वागत छ ।</string>
     <string name="email">ईमेल</string>
     <string name="password">पासवर्ड</string>
     <string name="remember">मलाई सम्झनुहोस्</string>
@@ -35,7 +35,7 @@
 
 
     <string name="create_account_with">खाता खोल्नुहोस्</string>
-    <string name="sign_to_agree">लगइन क्लिक गरेर, तपाईं हाम्रो नियम र सर्तहरू स्वीकार गर्दै हुनुहुन्छ</string>
+    <string name="sign_to_agree">लगइन क्लिक गरेर, तपाईं हाम्रो नियम र सर्तहरू स्वीकार गर्दै हुनुहुन्छ ।</string>
     <string name="login_with_facebook">फेसबुकबाट लगइन</string>
 
     <string name="newbooking">नयाँ बुकिंग</string>
@@ -46,6 +46,55 @@
     <string name="select_place">ठाउँ छनौट गर्नुहोस्</string>
     <string name="date_of_journey">प्रस्थान मिति</string>
     <string name="submit">बुझाउनुहोस्</string>
-    <string name="login_with_google">Login with Google</string>
+    <string name="login_with_google">गुगलका साथ लगईन गर्नुहोस्</string>
+    <string name="enter_email">कृपया तपाईंको ईमेल प्रविष्ट गर्नुहोस्</string>
+    <string name="password_sent_in_email">पासवर्ड तपाईको इ-मेलमा पठाइएको छ</string>
+    <string name="enter_password">कृपया पासवर्ड प्रविष्ट गर्नुहोस्</string>
+    <string name="name">नाम</string>
+    <string name="address">ठेगाना</string>
+    <string name="phone">फोन</string>
+    <string name="register">रेजिस्टर</string>
+    <string name="already_have_account">पहिले नै खाता छ?</string>
+    <string name="enter_name">तपाईंको नाम प्रविष्ट गर्नुहोस्</string>
+    <string name="enter_address">ठेगाना प्रविष्ट गर्नुहोस्</string>
+    <string name="enter_phone_no">फोन प्रविष्ट गर्नुहोस् र १० संख्याको हुनुपर्दछ</string>
+    <string name="password_length">पासवर्ड ६ संख्याको वा सो भन्दा अधिक वर्णहरूको हुनुपर्दछ</string>
+    <string name="signup_successful">साइनअप सफल भयो</string>
+    <string name="signup_error">केहि गलत भयो। सन्देश यास प्रकार छ - </string>
+    <string name="signup_unsuccessful">साइन अप असफल भएको छ । कृपया फेरि प्रयास गर्नुहोस</string>
+    <string name="image_uploaded_successfully">तस्विर सफलतापूर्वक अपलोड गरियो ।</string>
+    <string name="uploading">अपलोड हुदै छ ...</string>
+    <string name="login_successful">लगइन सफल भयो ।</string>
+    <string name="login_failed">लगइन असफल भयो । कृपया युजरनेम र पासवर्ड जाँच गर्नुहोस् । साईन अप नगर्नु भएको भए साईन अप गर्नु होला । धन्यवाद ।</string>
+    <string name="uploaded">अपलोड भएको छ- </string>
+
+    <string name="login_successful_from_facebook">फेसबुकबाट लगईन सफल भएको छ।</string>
+    <string name="login_canceled_from_facebook">फेसबुकबाट लगइन रद्द गरिएको छ ।</string>
+    <string name="error_logging_in_facebook">फेसबुकबाट लगइन असफल भएको छ। सन्देश यास प्रकार छ : </string>
+    <string name="login_failed_from_facebook">फेसबुकबाट लगइन असफल भएको छ।</string>
+
+    <string name="login_successful_from_google">गुगलबाट लगईन सफल भएको छ।</string>
+    <string name="login_failed_from_google">गुगलबाट लगइन असफल भएको छ।</string>
+    <string name="login_failed_from_google_message">गुगलबाट लगइन असफल भएको छ। सन्देश यास प्रकार छ :</string>
+
+    <string name="signup_verification_email">प्रमाणिकरण ईमेल तपाईंको प्रदान गरिएको ईमेलमा पठाइएको छ।</string>
+    <string name="signup_error_verification_email">मान्य ईमेल प्रदान गर्नुहोस्।</string>
+    <string name="verify_email">तपाईंको ईमेल प्रमाणित गर्नुहोस्।</string>
+    <string name="btn_verify">प्रमाणित गर्नुहोस्</string>
+    <string name="btn_resend">फेरि पठाउनुहोस्</string>
+    <string name="action_reset_password">पासवर्ड रिसेट</string>
+    <string name="want_to_reset_password">पासवर्ड रिसेट ?</string>
+    <string name="yes">हो</string>
+    <string name="password_reset_successful">पासवर्ड रीसेट सफलतापूर्वक।</string>
+    <string name="no">होईन</string>
+    <string name="password_reset_unsuccessful">पासवर्ड रिसेट गर्न सकिदैन। सन्देश यास प्रकार छ :</string>
+    <string name="profile_upload_successful">प्रोफाइल सफलतापूर्वक अपलोड गरियो।</string>
+    <string name="profile_upload_unsuccessful">प्रोफाइल अपलोड गर्न असफल भयो ।</string>
+    <string name="logout">तपाईले लग आउट गर्नुभयो।</string>
+    <string name="failed_to_fetch_images">चित्रहरू ल्याउन सकेन</string>
+    <string name="failed_to_load">लोड गर्न असफल भयो। सन्देश:</string>
+    <string name="network_not_available">नेटवर्क उपलब्ध छैन!</string>
+    <string name="no_network_available">वाइफाइ वा डाटा नेटवर्क छैन ।</string>
+
 
 </resources>

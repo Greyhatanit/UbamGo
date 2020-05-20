@@ -7,6 +7,19 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" /> <!-- Aspect Ratio -->
+
+    <meta-data
+        android:name="android.max_aspect"
+        android:value="2.1" />
+
     <compatible-screens>
 
         <!-- all small size screens -->
@@ -67,7 +80,8 @@
         </activity> <!-- Our Activity -->
         <activity
             android:name=".splashscreen.SplashScreen"
-            android:theme="@style/SplashScreen">
+            android:theme="@style/SplashScreen"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

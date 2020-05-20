@@ -37,7 +37,7 @@
 
     <string name="create_account_with">Create Account with</string>
     <string name="sign_to_agree">By Clicking on login, you are accepting our terms and conditions</string>
-    <string name="login_with_facebook">Login with Facebook</string>
+    <string name="login_with_facebook">Facebook Sign In</string>
 
     <string name="newbooking">New Booking</string>
     <string name="from">From</string>
@@ -48,5 +48,53 @@
     <string name="date_of_journey">Date of Journey</string>
     <string name="submit">Submit</string>
     <string name="login_with_google">Login with Google</string>
+    <string name="enter_email">Please enter your email</string>
+    <string name="password_sent_in_email">Password is sent in your Email</string>
+    <string name="enter_password">Please Enter Password</string>
+    <string name="name">Name</string>
+    <string name="address">Address</string>
+    <string name="phone">Phone</string>
+    <string name="register">Register</string>
+    <string name="already_have_account">Already have Account?</string>
+    <string name="enter_name">Enter Your Name</string>
+    <string name="enter_address">Enter Address</string>
+    <string name="enter_phone_no">Enter Phone and should be 10 digits</string>
+    <string name="password_length">Password Must be >= 6 Characters</string>
+    <string name="signup_successful">Sign Up Successful</string>
+    <string name="signup_error">Something went wrong. Message is -</string>
+    <string name="signup_unsuccessful">"Signup was unsuccessful. Please try again"</string>
+    <string name="image_uploaded_successfully">Image Uploaded Successfully.</string>
+    <string name="uploading">Uploading... \u0020</string>
+    <string name="login_successful">Login Successful</string>
+    <string name="login_failed">Login failed. Did u Signed Up? If not, please click on Sign Up</string>
+    <string name="uploaded">"Uploaded"</string>
+
+    <string name="login_successful_from_facebook">Login Successful From Facebook</string>
+    <string name="login_canceled_from_facebook">Login Canceled from Facebook</string>
+    <string name="error_logging_in_facebook">Error logging in Facebook. Message is : </string>
+    <string name="login_failed_from_facebook">Login Failed from Facebook.</string>
+
+    <string name="login_successful_from_google">Login Successful from Google</string>
+    <string name="login_failed_from_google">Login failed from Google</string>
+    <string name="login_failed_from_google_message">Login Failed from Google. Message is :</string>
+    <string name="signup_verification_email">Verification Email has been Sent in your provided Email.</string>
+    <string name="signup_error_verification_email">"Error in sending verification email. Please provide Valid Email. "</string>
+    <string name="verify_email">Verify your Email.</string>
+    <string name="btn_verify">Verfiy</string>
+    <string name="btn_resend">Resend</string>
+
+    <string name="action_reset_password">Reset Password</string>
+    <string name="want_to_reset_password">Reset Password ?</string>
+    <string name="password_reset_successful">Password Reset Successfully.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="password_reset_unsuccessful">"Could Reset Password. Message : "</string>
+    <string name="profile_upload_successful">Profile Uploaded Successfully.</string>
+    <string name="profile_upload_unsuccessful">Failed to upload profile</string>
+    <string name="logout">You logged out.</string>
+    <string name="failed_to_fetch_images">Could not fetch images</string>
+    <string name="failed_to_load">"Failed to Load. Message : "</string>
+    <string name="network_not_available">Network connection is not available!</string>
+    <string name="no_network_available">WiFi or Data Network not Enabled</string>
 
 </resources>

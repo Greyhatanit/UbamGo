@@ -1,26 +1,56 @@
 package com.asyantech.ubamgo;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.asyantech.ubamgo.login.LoginActivity;
+import com.asyantech.ubamgo.login.SignUpActivity;
+import com.asyantech.ubamgo.model.User;
 import com.asyantech.ubamgo.seatbooking.SeatBookingActivity;
 import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -28,15 +58,37 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class DashboardActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    FirebaseAuth firebaseAuth;
 
     ImageView profileImageView;
     TextView profileTextView;
     TextView profileEmailTextView;
+
+    Button btn_verify;
+    LinearLayout verify_email_layout;
+
+    //Google In
+    private GoogleSignInClient mGoogleSignInClient;
+
+    FirebaseAuth firebaseAuth;
+    FirebaseFirestore firestore;
+    FirebaseStorage firebaseStorage;
+    FirebaseUser firebaseUser;
+    private Uri filePath;
+    String userID;
+
+    //Swipe Refresh Layout
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,37 +121,106 @@ public class DashboardActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_item);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-        View navHeaderView = navigationView.getHeaderView(0);
+        firebaseAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
 
+        verify_email_layout = findViewById(R.id.verfiyEmailLayout);
+        btn_verify = (Button) findViewById(R.id.btn_verify_email);
+
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+        if(!firebaseUser.isEmailVerified()){
+            verify_email_layout.setVisibility(View.VISIBLE);
+            btn_verify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getApplicationContext(), R.string.signup_verification_email, Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), R.string.signup_error_verification_email + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+        }else{
+            verify_email_layout.setVisibility(View.GONE);
+        }
+
+
+
+        View navHeaderView = navigationView.getHeaderView(0);
+        //Set Images in NavigationDrawer
         profileImageView = (ImageView) navHeaderView.findViewById(R.id.profileImageView);
         profileTextView = (TextView) navHeaderView.findViewById(R.id.profileTextView);
         profileEmailTextView = (TextView) navHeaderView.findViewById(R.id.profileEmailTextView);
-        //loadUserInformation();
 
+        profileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Open Gallery
+                Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(openGalleryIntent,1);
+            }
+        });
+
+        loadUserInformation();
+
+        //Swipe Refreshlayout
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayoutDashboard);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(firebaseUser.isEmailVerified()){
+                    verify_email_layout.setVisibility(View.VISIBLE);
+                    btn_verify.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(getApplicationContext(), R.string.signup_verification_email, Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getApplicationContext(), R.string.signup_error_verification_email + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    });
+                }else{
+                    verify_email_layout.setVisibility(View.GONE);
+                }
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
-    /*
     private void loadUserInformation(){
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        if(user != null){
-
-            if(user.getPhotoUrl() != null){
-                Glide.with(this)
-                        .load(user.getPhotoUrl().toString())
+        userID = firebaseAuth.getCurrentUser().getUid();
+        final DocumentReference documentReference = firestore.collection("Users").document(userID);
+        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+            String image_url = documentSnapshot.getString("user_img");
+            if(image_url != null){
+                Glide.with(getApplicationContext())
+                        .load(image_url)
                         .into(profileImageView);
+            }else{
+                profileImageView.setImageResource(R.drawable.placeholder_for_profile);
             }
-
-
-            if(user.getDisplayName() != null){
-                profileTextView.setText(user.getDisplayName());
+            profileTextView.setText(documentSnapshot.getString("user_name"));
+            profileEmailTextView.setText(documentSnapshot.getString("user_email"));
             }
-
-            if(user.getEmail() != null){
-                profileEmailTextView.setText(user.getEmail());
-            }
-        }
+        });
     }
-    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -119,9 +240,11 @@ public class DashboardActivity extends AppCompatActivity {
                 editor.apply();
                 //Logout of Firebase
                 firebaseAuth.getInstance().signOut();
-                //Logout of Facebook
-                LoginManager.getInstance().logOut();
                 updateUI();
+                break;
+
+            case R.id.action_change_password:
+                changePassword();
                 break;
             default:
                 super.onOptionsItemSelected(item);
@@ -145,14 +268,143 @@ public class DashboardActivity extends AppCompatActivity {
         if(currentUser == null){
             updateUI();
         }
-
          */
     }
 
     private void updateUI() {
-        Toast.makeText(this, "You are logged in", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.logout, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    void changePassword(){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(DashboardActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.reset_password_dialog, null);
+
+        final EditText reset_password = (EditText)mView.findViewById(R.id.et_reset_password);
+        final ProgressBar progressBarResetPassword = (ProgressBar) mView.findViewById(R.id.progressBarResetPassword);
+        Button btn_reset_password = (Button) mView.findViewById(R.id.btn_reset_password);
+
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
+
+        btn_reset_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //String forgottenEmail = forgotten_email.getText().toString().trim();
+                String password_typed = reset_password.getText().toString().trim();
+                if (reset_password.getText().toString().isEmpty() && password_typed.length() < 6) {
+                    Toast.makeText(DashboardActivity.this, R.string.password_length, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                //Sending password reset email to forgotten passwords
+                firebaseAuth = FirebaseAuth.getInstance();
+                firebaseUser = firebaseAuth.getCurrentUser();
+                progressBarResetPassword.setVisibility(View.VISIBLE);
+                firebaseUser.updatePassword(password_typed)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            progressBarResetPassword.setVisibility(View.GONE);
+                            dialog.dismiss();
+                            Toast.makeText(DashboardActivity.this, R.string.password_reset_successful, Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressBarResetPassword.setVisibility(View.GONE);
+                            dialog.dismiss();
+                            Toast.makeText(DashboardActivity.this, R.string.password_reset_unsuccessful +e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1 && resultCode == RESULT_OK && data!= null){
+            filePath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                profileImageView.setImageBitmap(bitmap);
+                uploadImageToFirebase(filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    void uploadImageToFirebase(final Uri imageUri){
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle(R.string.uploading);
+        progressDialog.show();
+
+        String profile_path = "profiles/"+UUID.randomUUID().toString();
+        final StorageReference reference = firebaseStorage.getReference(profile_path);
+        final UploadTask uploadTask = reference.putFile(imageUri);
+        //upload file to firestore
+        uploadTask.addOnCompleteListener(DashboardActivity.this, new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                progressDialog.dismiss();
+
+                //get Download uri
+                Task<Uri> getDownloadUriTask = uploadTask.continueWithTask(
+                    new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if(!task.isSuccessful()){
+                            throw task.getException();
+                        }
+                        return reference.getDownloadUrl();
+                        }
+                    }
+                );
+                getDownloadUriTask.addOnCompleteListener(DashboardActivity.this, new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                    if(task.isSuccessful()){
+                        Uri downloadUri = task.getResult();
+                        //Key to upload
+                        final String KEY_ProfileImage = "user_img";
+                        String profile_image_url = downloadUri.toString();
+                        //update the user_img section of the corresponding user
+                        Map<String, Object> note = new HashMap<>();
+                        note.put(KEY_ProfileImage, profile_image_url );
+                        DocumentReference documentReference = firestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid());
+                        documentReference.set(note, SetOptions.merge())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(DashboardActivity.this, R.string.profile_upload_successful, Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(DashboardActivity.this, R.string.profile_upload_unsuccessful, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    }
+                    }
+                });
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                progressDialog.setMessage(R.string.uploading +"\u0020 \u0020"+ (int)progress + " %");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(DashboardActivity.this, R.string.profile_upload_unsuccessful, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -80,17 +80,17 @@ public class HomeFragment extends Fragment {
                         imageSlider.setImageList(slideModels, true);
 
                     } else {
-                        Toast.makeText(getActivity(), "Could not fetch images", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.failed_to_fetch_images, Toast.LENGTH_SHORT).show();
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getActivity(), "Failed to Load " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.failed_to_load + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }else{
-            Toast.makeText(getActivity(), "Network connection is not available!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.network_not_available, Toast.LENGTH_SHORT).show();
             slideModels = new ArrayList<>();
             slideModels.add(new SlideModel(R.drawable.ubambackground1, false));
             slideModels.add(new SlideModel(R.drawable.ubambackground2, false));
@@ -127,17 +127,17 @@ public class HomeFragment extends Fragment {
                                 imageSlider.setImageList(slideModels, true);
 
                             } else {
-                                Toast.makeText(getActivity(), "Could not fetch images", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), R.string.failed_to_fetch_images, Toast.LENGTH_SHORT).show();
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getActivity(), "Failed to Load " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.failed_to_load + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }else{
-                    Toast.makeText(getActivity(), "Network connection is not available!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.network_not_available, Toast.LENGTH_SHORT).show();
                     slideModels = new ArrayList<>();
                     slideModels.add(new SlideModel(R.drawable.ubambackground1, false));
                     slideModels.add(new SlideModel(R.drawable.ubambackground2, false));
@@ -162,18 +162,16 @@ public class HomeFragment extends Fragment {
             if(null != activeNetwork){
                 if(info.getType()==ConnectivityManager.TYPE_WIFI){
                     if(info.isConnected()){
-                        Toast.makeText(getContext(), "Wifi Enabled", Toast.LENGTH_SHORT).show();
                         have_WIFI = true;
                     }
                 }
                 if(info.getType() == ConnectivityManager.TYPE_MOBILE){
                     if(info.isConnected()){
-                        Toast.makeText(getContext(), "Data Network Enabled", Toast.LENGTH_SHORT).show();
                         have_MobileData = true;
                     }
                 }
             }else{
-                Toast.makeText(getContext(), "WiFi or Data Network not Enabled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.no_network_available, Toast.LENGTH_SHORT).show();
             }
         }
         return have_MobileData || have_WIFI;
