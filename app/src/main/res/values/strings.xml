@@ -2,8 +2,8 @@
     <string name="app_name">UbamGo</string>
 
     <!--Facebook -->
-    <string name="facebook_app_id" translatable="false">222836639052549</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb222836639052549</string>
+    <string name="facebook_app_id" translatable="false">590274178564193</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb590274178564193</string>
 
     <string name="bus_stand">Bus Stand Picture</string>
     <string name="welcome_text">Welcome to Ubam Go</string>

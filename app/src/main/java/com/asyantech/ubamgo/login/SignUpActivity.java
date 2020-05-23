@@ -190,7 +190,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             Toast.makeText(SignUpActivity.this, R.string.signup_successful, Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                                            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
                                             progressBar.setVisibility(View.GONE);
                                             finish();
                                         }
@@ -215,8 +215,8 @@ public class SignUpActivity extends AppCompatActivity {
         loginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                finish();
             }
         });
     }
@@ -284,5 +284,11 @@ public class SignUpActivity extends AppCompatActivity {
                 Toast.makeText(SignUpActivity.this, R.string.profile_upload_unsuccessful, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
     }
 }
