@@ -31,18 +31,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -52,7 +50,6 @@ public class SignUpActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
     TextView loginTextView;
-
     ImageView ubamProfile;
 
     //Firebase Auth
@@ -60,7 +57,6 @@ public class SignUpActivity extends AppCompatActivity {
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     private Uri filePath;
-    private FirebaseStorage storage;
     FirebaseStorage firebaseStorage;
 
     //Profile Picture Url
@@ -87,18 +83,19 @@ public class SignUpActivity extends AppCompatActivity {
 
         //Firebase
         firebaseAuth = FirebaseAuth.getInstance();
-        storage = FirebaseStorage.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
 
         //Upload Profile Picture
         ubamProfile = (ImageView) findViewById(R.id.ubam_profile);
-
         ubamProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Open Gallery
+                /*
                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(openGalleryIntent,1);
+                 */
+                CropImage.activity()
+                        .start(SignUpActivity.this);
             }
         });
 
@@ -225,6 +222,19 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                filePath = result.getUri();
+                //Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                //ubamProfile.setImageBitmap(bitmap);
+                ubamProfile.setImageURI(filePath);
+                uploadImage(filePath);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+        /*
         if(requestCode == 1 && resultCode == RESULT_OK && data!= null){
             filePath = data.getData();
             try {
@@ -235,7 +245,9 @@ public class SignUpActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+         */
     }
+
 
     private void uploadImage(final Uri imageUri){
         final ProgressDialog progressDialog = new ProgressDialog(this);

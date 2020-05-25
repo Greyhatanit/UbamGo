@@ -1,14 +1,10 @@
 package com.asyantech.ubamgo;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
@@ -21,12 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.asyantech.ubamgo.login.LoginActivity;
-import com.asyantech.ubamgo.login.SignUpActivity;
-import com.asyantech.ubamgo.model.User;
 import com.asyantech.ubamgo.seatbooking.SeatBookingActivity;
 import com.bumptech.glide.Glide;
-import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -47,6 +39,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -59,9 +52,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -76,9 +66,6 @@ public class DashboardActivity extends AppCompatActivity {
 
     Button btn_verify;
     LinearLayout verify_email_layout;
-
-    //Google In
-    private GoogleSignInClient mGoogleSignInClient;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firestore;
@@ -129,30 +116,32 @@ public class DashboardActivity extends AppCompatActivity {
         btn_verify = (Button) findViewById(R.id.btn_verify_email);
 
         firebaseUser = firebaseAuth.getCurrentUser();
-
-        if(!firebaseUser.isEmailVerified()){
-            verify_email_layout.setVisibility(View.VISIBLE);
-            btn_verify.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(getApplicationContext(), R.string.signup_verification_email, Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), R.string.signup_error_verification_email + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            });
-        }else{
+        String firebaseSignInProvider = (String) firebaseUser.getIdToken(false).getResult().getSignInProvider();
+        if(firebaseSignInProvider.equals("facebook.com") || firebaseSignInProvider.equals("google.com")){
             verify_email_layout.setVisibility(View.GONE);
+        }else{
+            if(!firebaseUser.isEmailVerified()){
+                verify_email_layout.setVisibility(View.VISIBLE);
+                btn_verify.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getApplicationContext(), R.string.signup_verification_email, Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), R.string.signup_error_verification_email + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+            }else{
+                verify_email_layout.setVisibility(View.GONE);
+            }
         }
-
-
 
         View navHeaderView = navigationView.getHeaderView(0);
         //Set Images in NavigationDrawer
@@ -164,8 +153,12 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Open Gallery
+                /*
                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(openGalleryIntent,1);
+                 */
+                CropImage.activity()
+                        .start(DashboardActivity.this);
             }
         });
 
@@ -176,26 +169,13 @@ public class DashboardActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if(firebaseUser.isEmailVerified()){
-                    verify_email_layout.setVisibility(View.VISIBLE);
-                    btn_verify.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(getApplicationContext(), R.string.signup_verification_email, Toast.LENGTH_SHORT).show();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getApplicationContext(), R.string.signup_error_verification_email + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
+                firebaseAuth = FirebaseAuth.getInstance();
+                firebaseUser = firebaseAuth.getCurrentUser();
+                String firebaseSignInProvider = (String) firebaseUser.getIdToken(false).getResult().getSignInProvider();
+                if(firebaseSignInProvider.equals("facebook.com") || firebaseSignInProvider.equals("google.com")){
+                    verify_email_layout.setVisibility(View.INVISIBLE);
                 }else{
-                    verify_email_layout.setVisibility(View.GONE);
+                    verify_email_layout.setVisibility(View.VISIBLE);
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -269,6 +249,21 @@ public class DashboardActivity extends AppCompatActivity {
             updateUI();
         }
          */
+        //Check if the user has logged in from facebook
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        if(firebaseUser != null){
+            String firebaseSignInProvider = (String) firebaseUser.getIdToken(false).getResult().getSignInProvider();
+            if(firebaseSignInProvider.equals("facebook.com") || firebaseSignInProvider.equals("google.com")){
+                verify_email_layout.setVisibility(View.GONE);
+            }else{
+                if(firebaseUser.isEmailVerified()){
+                    verify_email_layout.setVisibility(View.GONE);
+                }else{
+                    verify_email_layout.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     private void updateUI() {
@@ -326,7 +321,7 @@ public class DashboardActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        /*
         if(requestCode == 1 && resultCode == RESULT_OK && data!= null){
             filePath = data.getData();
             try {
@@ -335,6 +330,17 @@ public class DashboardActivity extends AppCompatActivity {
                 uploadImageToFirebase(filePath);
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        } */
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                filePath = result.getUri();
+                profileImageView.setImageURI(filePath);
+                uploadImageToFirebase(filePath);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
             }
         }
     }
