@@ -95,6 +95,7 @@
     <string name="failed_to_load">लोड गर्न असफल भयो। सन्देश:</string>
     <string name="network_not_available">नेटवर्क उपलब्ध छैन!</string>
     <string name="no_network_available">वाइफाइ वा डाटा नेटवर्क छैन ।</string>
+    <string name="select_source_place">Source of Place</string>
 
 
 </resources>

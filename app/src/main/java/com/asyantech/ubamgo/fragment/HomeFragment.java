@@ -29,9 +29,6 @@ import java.util.List;
 import static android.content.Context.CONNECTIVITY_SERVICE;
 import static androidx.core.content.ContextCompat.getSystemService;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class HomeFragment extends Fragment {
     //Sliders
     List<SlideModel> slideModels;

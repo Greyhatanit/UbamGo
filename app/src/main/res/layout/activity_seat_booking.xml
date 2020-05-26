@@ -45,7 +45,125 @@
         app:layout_constraintTop_toBottomOf="@+id/newbooking"
         app:layout_constraintVertical_bias="0.01999998" />
 
+    <LinearLayout
+        android:id="@+id/selectplace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_shorter"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/select_place"
+        app:layout_constraintVertical_bias="0.0">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/getonbus"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="5dp"
+                android:src="@drawable/getonbus" />
+
+            <TextView
+                android:id="@+id/from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/getonbus"
+                android:autoSizeTextType="uniform"
+                android:gravity="center_horizontal"
+                android:text="@string/from"
+                android:textColor="@color/colorAccent"
+                android:textSize="22sp" />
+            <!--
+            <TextView
+                android:id="@+id/source_of_travel_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/getoffbustotal"
+                android:layout_marginLeft="50dp"
+                android:autoSizeTextType="uniform"
+                android:padding="2dp"
+                android:text="Kathmandu"
+                android:textSize="22sp" />
+               -->
+            <Spinner
+                android:id="@+id/source_of_travel"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="50dp"
+                android:elevation="10dp"
+                android:background="@android:color/holo_blue_light"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/line"
+                android:layout_width="250dp"
+                android:layout_height="1dp"
+                android:layout_margin="10dp"
+                android:background="@color/lightgray" />
+
+            <ImageView
+                android:id="@+id/placeswap"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignRight="@+id/line"
+                android:layout_margin="0dp"
+                android:adjustViewBounds="true"
+                android:alpha="0.5"
+                android:background="@drawable/circlebackgroundred"
+                android:rotation="90"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_swap" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/getoffbus"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="5dp"
+                android:src="@drawable/getoffbus" />
+
+            <TextView
+                android:id="@+id/to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/getoffbus"
+                android:autoSizeTextType="uniform"
+                android:text="@string/to"
+                android:textColor="@color/colorAccent"
+                android:textSize="22sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/getoffbustotal"
+                android:layout_marginLeft="50dp"
+                android:autoSizeTextType="uniform"
+                android:padding="2dp"
+                android:text="Kathmandu"
+                android:textSize="22sp" />
+        </LinearLayout>
+    </LinearLayout>
+    <!--
     <androidx.cardview.widget.CardView
         android:id="@+id/bookSeat"
         android:layout_width="0dp"
@@ -62,113 +180,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/select_place"
         app:layout_constraintVertical_bias="0.01999998">
-
-        <LinearLayout
-            android:id="@+id/selectplace"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_shorter"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/getonbus"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:padding="5dp"
-                    android:src="@drawable/getonbus" />
-
-                <TextView
-                    android:id="@+id/from"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/getonbus"
-                    android:autoSizeTextType="uniform"
-                    android:gravity="center_horizontal"
-                    android:text="@string/from"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="22sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/getonbus"
-                    android:layout_marginLeft="10dp"
-                    android:autoSizeTextType="uniform"
-                    android:padding="2dp"
-                    android:text="Tulsipur"
-                    android:textSize="22sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-10dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <View
-                    android:id="@+id/line"
-                    android:layout_width="250dp"
-                    android:layout_height="1dp"
-                    android:layout_margin="10dp"
-                    android:background="@color/lightgray" />
-
-                <ImageView
-                    android:id="@+id/placeswap"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignRight="@+id/line"
-                    android:layout_margin="0dp"
-                    android:adjustViewBounds="true"
-                    android:alpha="0.5"
-                    android:background="@drawable/circlebackgroundred"
-                    android:rotation="90"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_swap" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-10dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/getoffbus"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:padding="5dp"
-                    android:src="@drawable/getoffbus" />
-
-                <TextView
-                    android:id="@+id/to"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/getoffbus"
-                    android:autoSizeTextType="uniform"
-                    android:text="@string/to"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="22sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/getoffbustotal"
-                    android:layout_marginLeft="50dp"
-                    android:autoSizeTextType="uniform"
-                    android:padding="2dp"
-                    android:text="Kathmandu"
-                    android:textSize="22sp" />
-            </LinearLayout>
-        </LinearLayout>
     </androidx.cardview.widget.CardView>
-
+    -->
     <TextView
         android:id="@+id/date_of_journey"
         android:layout_width="wrap_content"
@@ -185,7 +198,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.053"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bookSeat"
+        app:layout_constraintTop_toBottomOf="@+id/selectplace"
         app:layout_constraintVertical_bias="0.01999998" />
 
     <androidx.cardview.widget.CardView

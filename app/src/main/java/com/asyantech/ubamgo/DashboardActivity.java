@@ -173,7 +173,7 @@ public class DashboardActivity extends AppCompatActivity {
                 firebaseUser = firebaseAuth.getCurrentUser();
                 String firebaseSignInProvider = (String) firebaseUser.getIdToken(false).getResult().getSignInProvider();
                 if(firebaseSignInProvider.equals("facebook.com") || firebaseSignInProvider.equals("google.com")){
-                    verify_email_layout.setVisibility(View.INVISIBLE);
+                    verify_email_layout.setVisibility(View.GONE);
                 }else{
                     verify_email_layout.setVisibility(View.VISIBLE);
                 }
