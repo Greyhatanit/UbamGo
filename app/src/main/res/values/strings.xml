@@ -96,7 +96,9 @@
     <string name="failed_to_load">"Failed to Load. Message : "</string>
     <string name="network_not_available">Network connection is not available!</string>
     <string name="no_network_available">WiFi or Data Network not Enabled</string>
-    <string name="select_source_place">Source of Place</string>
+    <string name="source_of_travel">Source of Travel</string>
+    <string name="destination_of_travel">Destination of Travel</string>
+    <string name="choose_time">Choose Time</string>
 
 
 </resources>

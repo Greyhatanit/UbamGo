@@ -71,4 +71,6 @@ dependencies {
     //Android Image Cropper
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
 
+    //Nepali Date Picker
+
 }

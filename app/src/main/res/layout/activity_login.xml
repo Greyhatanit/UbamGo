@@ -327,7 +327,7 @@
                 android:layout_margin="@dimen/margin_short"
                 android:background="@drawable/facebooklogo"
                 android:drawableLeft="@drawable/facebook"
-                android:paddingRight="@dimen/padding_small"
+                android:padding="10dp"
                 android:text="@string/login_with_facebook"
                 android:textColor="@android:color/white" />
 

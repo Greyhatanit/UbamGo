@@ -9,6 +9,4 @@
         <bitmap android:src="@drawable/ubam"
             android:gravity="center"/>
     </item>
-
-
 </layer-list>

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,28 +26,39 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
-public class SeatBookingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class SeatBookingActivity extends AppCompatActivity{
     EditText dateformat;
-    int year, month, day;
 
     Button chooseSeat;
-    Spinner sourceOfTravel;
+
+    //Spinner sourceOfTravel, destinationOfTravel;
+    EditText sourceOfTravel, destinationOfTravel;
     //Firebase
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference notebookRef = db.collection("PlacesToTravel");
     List<String> categories;
+    Calendar calendar;
+    int year, month, day;
 
-    TextView source_of_travel_tv;
+    //Adapter
+    ArrayAdapter dataAdapter;
 
+    //Swap values of spinner
+    ImageView swapValuesofSpinnerImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seat_booking);
+        getSupportActionBar().setElevation(0);
 
         chooseSeat = findViewById(R.id.choose_seat);
         chooseSeat.setOnClickListener(new View.OnClickListener() {
@@ -56,9 +69,13 @@ public class SeatBookingActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
-
         dateformat = findViewById(R.id.choose_journey_date);
-        final Calendar calendar = Calendar.getInstance();
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1);
+
+        String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+
+        dateformat.setHint(currentDate);
         dateformat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,34 +85,55 @@ public class SeatBookingActivity extends AppCompatActivity implements AdapterVie
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(SeatBookingActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        dateformat.setText(SimpleDateFormat.getDateInstance().format(calendar.getTime()));
+                    public void onDateSet(DatePicker view, int mYear, int mMonth, int mDayOfMonth) {
+                        dateformat.setText(mDayOfMonth+"/"+(mMonth+1)+"/"+mYear);
                     }
                 }, year, month, day);
+                datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
                 datePickerDialog.show();
             }
         });
 
+
         //Setting up spinner for Source of Travel
-        //source_of_travel_tv = (TextView) findViewById(R.id.source_of_travel_tv);
+        /*
         sourceOfTravel = (Spinner) findViewById(R.id.source_of_travel);
         sourceOfTravel.setOnItemSelectedListener(this);
 
+        destinationOfTravel = (Spinner) findViewById(R.id.destination_of_travel);
+        destinationOfTravel.setOnItemSelectedListener(this);
+
         categories = new ArrayList<String>();
-        getDataFromDatabaseSetupSpinner(new FirebaseCallback() {
+        categories.add("Tulsipur");
+        getDataFromDatabaseSetupSpinner();
+         */
+
+        sourceOfTravel = (EditText) findViewById(R.id.source_of_travel);
+        destinationOfTravel = (EditText) findViewById(R.id.destination_of_travel);
+
+        //Swap Values of Spinner
+        swapValuesofSpinnerImage = (ImageView) findViewById(R.id.placeswap);
+        swapValuesofSpinnerImage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCallBack(List<String> list) {
-                Toast.makeText(SeatBookingActivity.this, "List data "+list.toString(), Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                String sourceofTravelText = sourceOfTravel.getText().toString();
+
+                String destinationofTravelText = destinationOfTravel.getText().toString();
+                //Swapping the values of source and destination
+
+                sourceofTravelText = sourceofTravelText + destinationofTravelText;
+                destinationofTravelText = sourceofTravelText.substring(0, sourceofTravelText.length() - destinationofTravelText.length());
+                sourceofTravelText = sourceofTravelText.substring(destinationofTravelText.length());
+
+                //setting the values to both spinners
+                sourceOfTravel.setText(sourceofTravelText);
+                destinationOfTravel.setText(destinationofTravelText);
             }
         });
-        ArrayAdapter dataAdapter = new ArrayAdapter(this, R.layout.spinner_item, categories);
-        dataAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        sourceOfTravel.setAdapter(dataAdapter);
-        //sourceOfTravel.setPrompt(getString(R.string.select_source_place));
-        //sourceOfTravel.setOnItemSelectedListener(this);
     }
 
-    void getDataFromDatabaseSetupSpinner(final FirebaseCallback firebaseCallback){
+    /*
+    void getDataFromDatabaseSetupSpinner(){
         notebookRef.get()
             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
@@ -105,7 +143,10 @@ public class SeatBookingActivity extends AppCompatActivity implements AdapterVie
                             String itemName = document.getString("place_name");
                             categories.add(itemName);
                         }
-                        firebaseCallback.onCallBack(categories);
+                        dataAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item, categories);
+                        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        sourceOfTravel.setAdapter(dataAdapter);
+                        destinationOfTravel.setAdapter(dataAdapter);
                     }else{
                         Toast.makeText(SeatBookingActivity.this, "Error getting documents: ", Toast.LENGTH_SHORT).show();
                     }
@@ -120,23 +161,5 @@ public class SeatBookingActivity extends AppCompatActivity implements AdapterVie
 
     }
 
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // On selecting a spinner item
-        String item = parent.getItemAtPosition(position).toString();
-        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    private interface FirebaseCallback{
-        void onCallBack(List<String> list);
-    }
+     */
 }
