@@ -1,42 +1,43 @@
 package com.asyantech.ubamgo.seatbooking;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.asyantech.ubamgo.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
+import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class SeatBookingActivity extends AppCompatActivity{
-    EditText dateformat;
+    TextView dateformat;
 
     Button chooseSeat;
 
@@ -48,12 +49,14 @@ public class SeatBookingActivity extends AppCompatActivity{
     List<String> categories;
     Calendar calendar;
     int year, month, day;
-
     //Adapter
     ArrayAdapter dataAdapter;
-
     //Swap values of spinner
     ImageView swapValuesofSpinnerImage;
+    FirebaseFirestore firestore;
+
+    //Choose Time
+    TextView chooseTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,24 +72,32 @@ public class SeatBookingActivity extends AppCompatActivity{
             }
         });
 
+        firestore = FirebaseFirestore.getInstance();
+        chooseTime = (TextView) findViewById(R.id.choose_journey_time);
+
         dateformat = findViewById(R.id.choose_journey_date);
         calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1);
-
-        String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
-
-        dateformat.setHint(currentDate);
+        final String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
+        //dateformat.setText(currentDate);
         dateformat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 year = calendar.get(Calendar.YEAR);
                 month = calendar.get(Calendar.MONTH);
                 day = calendar.get(Calendar.DAY_OF_MONTH);
+                final String date_pattern = "dd MMMM yyyy";
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(SeatBookingActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int mYear, int mMonth, int mDayOfMonth) {
-                        dateformat.setText(mDayOfMonth+"/"+(mMonth+1)+"/"+mYear);
+                        //Toast.makeText(SeatBookingActivity.this, "Year: "+mYear+ "Month: "+(mMonth+1)+"Day: "+mDayOfMonth, Toast.LENGTH_SHORT).show();
+                        String currentDateString = mDayOfMonth+"/"+(month+1)+"/"+mYear;
+                        Calendar convertedDate = Calendar.getInstance();
+                        convertedDate.set(mYear, mMonth, mDayOfMonth);
+                        String datePicked = DateFormat.getDateInstance().format(convertedDate.getTime());
+                        dateformat.setText(datePicked);
+                        getBusNoAndDepatureTime(datePicked);
                     }
                 }, year, month, day);
                 datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
@@ -111,7 +122,7 @@ public class SeatBookingActivity extends AppCompatActivity{
         sourceOfTravel = (EditText) findViewById(R.id.source_of_travel);
         destinationOfTravel = (EditText) findViewById(R.id.destination_of_travel);
 
-        //Swap Values of Spinner
+        //Swap Values of Edit Text
         swapValuesofSpinnerImage = (ImageView) findViewById(R.id.placeswap);
         swapValuesofSpinnerImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +171,18 @@ public class SeatBookingActivity extends AppCompatActivity{
             });
 
     }
-
      */
+
+    void getBusNoAndDepatureTime(String choosen_date){
+
+        final DocumentReference documentReference = firestore.collection("ScheduledDepature").document(choosen_date);
+        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                String departure_time = documentSnapshot.getString("depature_time");
+                chooseTime.setText(departure_time);
+                //Toast.makeText(SeatBookingActivity.this, "Bus_no: "+bus_no+"Depature_time: "+departure_time, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

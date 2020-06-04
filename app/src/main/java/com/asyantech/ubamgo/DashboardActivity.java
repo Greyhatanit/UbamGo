@@ -77,6 +77,9 @@ public class DashboardActivity extends AppCompatActivity {
     //Swipe Refresh Layout
     SwipeRefreshLayout swipeRefreshLayout;
 
+    //Firebase login provider
+    String firebaseSignInProvider;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +119,8 @@ public class DashboardActivity extends AppCompatActivity {
         btn_verify = (Button) findViewById(R.id.btn_verify_email);
 
         firebaseUser = firebaseAuth.getCurrentUser();
-        String firebaseSignInProvider = (String) firebaseUser.getIdToken(false).getResult().getSignInProvider();
+        /*
+        firebaseSignInProvider = (String) firebaseUser.getIdToken(false).getResult().getSignInProvider();
         if(firebaseSignInProvider.equals("facebook.com") || firebaseSignInProvider.equals("google.com")){
             verify_email_layout.setVisibility(View.GONE);
         }else{
@@ -142,6 +146,7 @@ public class DashboardActivity extends AppCompatActivity {
                 verify_email_layout.setVisibility(View.GONE);
             }
         }
+         */
 
         View navHeaderView = navigationView.getHeaderView(0);
         //Set Images in NavigationDrawer
@@ -257,10 +262,26 @@ public class DashboardActivity extends AppCompatActivity {
             if(firebaseSignInProvider.equals("facebook.com") || firebaseSignInProvider.equals("google.com")){
                 verify_email_layout.setVisibility(View.GONE);
             }else{
-                if(firebaseUser.isEmailVerified()){
-                    verify_email_layout.setVisibility(View.GONE);
-                }else{
+                if(!firebaseUser.isEmailVerified()){
                     verify_email_layout.setVisibility(View.VISIBLE);
+                    btn_verify.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(getApplicationContext(), R.string.signup_verification_email, Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getApplicationContext(), R.string.signup_error_verification_email + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    });
+                }else{
+                    verify_email_layout.setVisibility(View.GONE);
                 }
             }
         }
