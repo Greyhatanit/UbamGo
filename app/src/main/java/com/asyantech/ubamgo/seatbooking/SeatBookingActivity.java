@@ -28,19 +28,13 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SeatBookingActivity extends AppCompatActivity {
     TextView dateformat;
-
     Button chooseSeat;
 
     Spinner sourceOfTravel, destinationOfTravel;
@@ -121,11 +115,6 @@ public class SeatBookingActivity extends AppCompatActivity {
                 // On selecting a spinner item
                 position_source = sourceOfTravel.getSelectedItemPosition();
                 selected_source = parent.getItemAtPosition(position).toString();
-
-                //Removing the selected Spinner and setting up to Destination Spinner
-
-                // Showing selected spinner item
-                //Toast.makeText(parent.getContext(), "Selected: " + selected_source+" Position: "+position_source, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -145,8 +134,6 @@ public class SeatBookingActivity extends AppCompatActivity {
                     position_destination = position_destination +1;
                     destinationOfTravel.setSelection(position_destination);
                 }
-                // Showing selected spinner item
-                //Toast.makeText(parent.getContext(), "Selected: " + selected_destination +" Position: "+position_destination, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -160,60 +147,12 @@ public class SeatBookingActivity extends AppCompatActivity {
 
         getDataFromDatabaseSetupSpinner();
 
-        //sourceOfTravel = (EditText) findViewById(R.id.source_of_travel);
-        //destinationOfTravel = (EditText) findViewById(R.id.destination_of_travel);
-
-        //Swap Values of Edit Text
         swapValuesofSpinnerImage = (ImageView) findViewById(R.id.placeswap);
         swapValuesofSpinnerImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sourceOfTravel.setSelection(position_destination);
                 destinationOfTravel.setSelection(position_source);
-                /*
-                Toast.makeText(SeatBookingActivity.this, "Places Swap Clicked", Toast.LENGTH_SHORT).show();
-                //Hash Map for for Selected Source
-                HashMap<Integer, String> sourceHashMap = new HashMap<Integer, String>();
-                sourceHashMap.put(position_source, selected_source);
-
-                //Hash Map for for Destination Source
-                HashMap<Integer, String> destinationHashMap = new HashMap<Integer, String>();
-                destinationHashMap.put(position_destination, selected_destination);
-
-                HashMap<Integer, String> temporaryHashMap = new HashMap<Integer, String>();
-
-                //Swapping values of Hash MAP
-                temporaryHashMap.putAll(sourceHashMap);
-                sourceHashMap.clear();
-                sourceHashMap.putAll(destinationHashMap);
-                destinationHashMap.clear();
-                destinationHashMap.putAll(temporaryHashMap);
-
-                for (HashMap.Entry<Integer, String> entry : sourceHashMap.entrySet()) {
-                    String baths = entry.getValue();
-                    sourceOfTravel.setSelection(Arrays.asList(baths).indexOf(entry.getKey()));
-                    Toast.makeText(SeatBookingActivity.this, "Source Key = " + entry.getKey() + ", Value = " + entry.getValue(), Toast.LENGTH_SHORT).show();
-                }
-
-                for (HashMap.Entry<Integer, String> entry : destinationHashMap.entrySet()) {
-                    String baths = entry.getValue();
-                    destinationOfTravel.setSelection(Arrays.asList(baths).indexOf(entry.getKey()));
-                    //Toast.makeText(SeatBookingActivity.this, "Destination Key = " + entry.getKey() + ", Value = " + entry.getValue(), Toast.LENGTH_SHORT).show();
-                }
-                 */
-                /*
-                String sourceofTravelText = sourceOfTravel.getText().toString();
-                String destinationofTravelText = destinationOfTravel.getText().toString();
-                //Swapping the values of source and destination
-
-                sourceofTravelText = sourceofTravelText + destinationofTravelText;
-                destinationofTravelText = sourceofTravelText.substring(0, sourceofTravelText.length() - destinationofTravelText.length());
-                sourceofTravelText = sourceofTravelText.substring(destinationofTravelText.length());
-
-                //setting the values to both spinners
-                sourceOfTravel.setText(sourceofTravelText);
-                destinationOfTravel.setText(destinationofTravelText);
-                 */
             }
         });
     }

@@ -21,7 +21,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_dashboard" />
-
+    <!--
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -31,5 +31,5 @@
         android:layout_marginBottom="70dp"
         app:srcCompat="@drawable/ic_seat"
         tools:ignore="VectorDrawableCompat" />
-
+    -->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
