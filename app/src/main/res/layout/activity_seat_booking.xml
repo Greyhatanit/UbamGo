@@ -92,7 +92,7 @@
                             android:text="@string/from"
                             android:textColor="@color/colorAccent"
                             android:textSize="18sp" />
-
+                        <!--
                         <EditText
                             android:id="@+id/source_of_travel"
                             android:layout_width="match_parent"
@@ -100,13 +100,12 @@
                             android:layout_marginLeft="10dp"
                             android:hint="@string/source_of_travel"
                             android:textSize="18sp" />
-                        <!--
+                            -->
                         <Spinner
                             android:id="@+id/source_of_travel"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp" />
-                        -->
+                            android:layout_marginLeft="@dimen/margin_default" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -131,7 +130,7 @@
                             android:text="@string/to"
                             android:textColor="@color/colorAccent"
                             android:textSize="18sp" />
-
+                        <!--
                         <EditText
                             android:id="@+id/destination_of_travel"
                             android:layout_width="match_parent"
@@ -139,32 +138,28 @@
                             android:layout_marginLeft="10dp"
                             android:hint="@string/destination_of_travel"
                             android:textSize="18sp" />
-                        <!--
+                        -->
                         <Spinner
                             android:id="@+id/destination_of_travel"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp" />
-                        -->
+                            android:layout_marginLeft="@dimen/margin_default" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:background="@drawable/bluebuttonbackground"
+                    android:gravity="center">
+
                     <ImageView
                         android:id="@+id/placeswap"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_alignRight="@+id/line"
-                        android:layout_margin="0dp"
-                        android:layout_marginLeft="10dp"
-                        android:adjustViewBounds="true"
-                        android:background="@drawable/circlebackgroundred"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:rotation="90"
-                        android:scaleType="fitXY"
                         android:src="@drawable/ic_swap" />
                 </LinearLayout>
             </LinearLayout>
