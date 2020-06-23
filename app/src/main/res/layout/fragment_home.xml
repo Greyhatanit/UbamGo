@@ -257,7 +257,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="5"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -299,6 +299,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/margin_default" />
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_margin="@dimen/padding_small"
+                            android:background="@color/lightgray" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -344,7 +350,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
                         android:gravity="center">
 
                         <ImageView
@@ -358,11 +363,17 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="@dimen/padding_small"
+                    android:background="@color/lightgray" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
                     <ImageView
                         android:id="@+id/calendar"
@@ -373,14 +384,29 @@
 
                     <TextView
                         android:id="@+id/choose_journey_date"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/margin_shorter"
                         android:ems="10"
                         android:text="@string/choose_date"
                         android:textColor="@color/colorAccent"
                         android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/date_tomorrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tomorrow"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"/>
+
                 </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="@dimen/padding_small"
+                    android:background="@color/lightgray" />
 
                 <Button
                     android:id="@+id/search_bus"

@@ -61,6 +61,7 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -92,11 +93,12 @@
             android:parentActivityName=".login.LoginActivity" />
         <activity
             android:name=".DashboardActivity"
-            android:theme="@style/AppMaterialTheme.NoActionBar"></activity>
+            android:theme="@style/AppMaterialTheme.NoActionBar" />
+        <activity android:name=".seatbooking.ListSchedulesActivity"
+            android:parentActivityName=".DashboardActivity"></activity>
         <activity
             android:name=".seatbooking.SeatBookingActivity"
-            android:parentActivityName=".DashboardActivity">
-        </activity>
+            android:parentActivityName=".DashboardActivity"></activity>
         <activity android:name=".seatbooking.ChooseSeatActivity" />
 
         <meta-data

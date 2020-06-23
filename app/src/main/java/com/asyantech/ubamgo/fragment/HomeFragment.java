@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,8 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.asyantech.ubamgo.R;
-import com.asyantech.ubamgo.seatbooking.ChooseSeatActivity;
-import com.asyantech.ubamgo.seatbooking.SeatBookingActivity;
+import com.asyantech.ubamgo.seatbooking.ListSchedulesActivity;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,9 +32,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
@@ -65,7 +61,7 @@ public class HomeFragment extends Fragment {
     FirebaseFirestore firestore;
 
     //Choose Time
-    TextView chooseTime;
+    TextView chooseTime, date_tomorrow;
 
     //Selected Strings
     int position_source, position_destination;
@@ -73,6 +69,10 @@ public class HomeFragment extends Fragment {
 
     //Search Bus Button
     Button searchBus;
+    String datePicked;
+
+    //Tag
+    private final static String TAG_HOME = "TAG_HOME";
 
     public HomeFragment() {
         // Required empty public constructor
@@ -188,24 +188,24 @@ public class HomeFragment extends Fragment {
         chooseTime = (TextView) view.findViewById(R.id.choose_journey_time);
 
         dateformat = view.findViewById(R.id.choose_journey_date);
+
         calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -1);
         final String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
+        dateformat.setText(currentDate);
+
         dateformat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 year = calendar.get(Calendar.YEAR);
                 month = calendar.get(Calendar.MONTH);
                 day = calendar.get(Calendar.DAY_OF_MONTH);
-                final String date_pattern = "dd MMMM yyyy";
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int mYear, int mMonth, int mDayOfMonth) {
-                        String currentDateString = mDayOfMonth+"/"+(month+1)+"/"+mYear;
                         Calendar convertedDate = Calendar.getInstance();
                         convertedDate.set(mYear, mMonth, mDayOfMonth);
-                        String datePicked = DateFormat.getDateInstance().format(convertedDate.getTime());
+                        datePicked = DateFormat.getDateInstance().format(convertedDate.getTime());
                         dateformat.setText(datePicked);
                         //getBusNoAndDepatureTime(datePicked);
                     }
@@ -215,8 +215,22 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //Setting up spinner for Source of Travel
+        //Set Date for Tomorrow
+        date_tomorrow = (TextView) view.findViewById(R.id.date_tomorrow);
+        date_tomorrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // add one day to the date/calendar
+                Calendar calendartom= Calendar.getInstance();
+                calendartom.add(Calendar.DAY_OF_YEAR, 1);
+                String tomorrow_date = DateFormat.getDateInstance().format(calendartom.getTime());
+                dateformat.setText(tomorrow_date);
+                date_tomorrow.setClickable(false);
+            }
+        });
 
+
+        //Setting up spinner for Source of Travel
         sourceOfTravel = (Spinner) view.findViewById(R.id.source_of_travel);
         sourceOfTravel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -271,11 +285,28 @@ public class HomeFragment extends Fragment {
         searchBus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), ChooseSeatActivity.class);
+
+                Intent intent = new Intent(getContext(), ListSchedulesActivity.class);
+                intent.putExtra("selected_source", selected_source);
+                intent.putExtra("selected_destination", selected_destination);
+                intent.putExtra("selected_date", (String) dateformat.getText());
                 startActivity(intent);
+
+                /*
+                ListSchedulesFragment listSchedulesFragment = new ListSchedulesFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("selected_source", selected_source);
+                bundle.putString("selected_destination", selected_destination);
+                bundle.putString("selected_date", (String) dateformat.getText());
+                listSchedulesFragment.setArguments(bundle);
+
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.nav_host_fragment, listSchedulesFragment);
+                fr.addToBackStack(TAG_HOME);
+                fr.commit();
+                 */
             }
         });
-
         return view;
     }
 
@@ -307,47 +338,34 @@ public class HomeFragment extends Fragment {
 
     void getDataFromDatabaseSetupSpinner(){
         placesToTravel.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for (DocumentSnapshot document: task.getResult()){
-                                String itemName = document.getString("place_name");
-                                sourcesList.add(itemName);
-                                destinationList.add(itemName);
-                            }
-                            dataAdapterForSource = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, sourcesList);
-                            dataAdapterForDestination = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, destinationList);
-
-                            dataAdapterForSource.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            dataAdapterForDestination.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                            sourceOfTravel.setAdapter(dataAdapterForSource);
-                            destinationOfTravel.setAdapter(dataAdapterForDestination);
-                        }else{
-                            Toast.makeText(getContext(), "Error getting documents: ", Toast.LENGTH_SHORT).show();
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()){
+                        for (DocumentSnapshot document: task.getResult()){
+                            String itemName = document.getString("place_name");
+                            sourcesList.add(itemName);
+                            destinationList.add(itemName);
                         }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(), "Error! "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
+                        dataAdapterForSource = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, sourcesList);
+                        dataAdapterForDestination = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, destinationList);
 
-    void getBusNoAndDepatureTime(String choosen_date){
+                        dataAdapterForSource.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        dataAdapterForDestination.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        final DocumentReference documentReference = firestore.collection("ScheduledDepature").document(choosen_date);
-        documentReference.addSnapshotListener((Activity) getContext(), new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                String departure_time = documentSnapshot.getString("depature_time");
-                chooseTime.setText(departure_time);
-                //Toast.makeText(SeatBookingActivity.this, "Bus_no: "+bus_no+"Depature_time: "+departure_time, Toast.LENGTH_SHORT).show();
-            }
-        });
+                        sourceOfTravel.setAdapter(dataAdapterForSource);
+                        destinationOfTravel.setAdapter(dataAdapterForDestination);
+                    }else{
+                        Toast.makeText(getContext(), "Error getting documents: ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getContext(), "Error! "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
 }
