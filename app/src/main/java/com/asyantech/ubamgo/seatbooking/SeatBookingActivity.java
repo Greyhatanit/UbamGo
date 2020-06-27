@@ -195,6 +195,7 @@ public class SeatBookingActivity extends AppCompatActivity {
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                
                 String departure_time = documentSnapshot.getString("depature_time");
                 chooseTime.setText(departure_time);
                 //Toast.makeText(SeatBookingActivity.this, "Bus_no: "+bus_no+"Depature_time: "+departure_time, Toast.LENGTH_SHORT).show();
