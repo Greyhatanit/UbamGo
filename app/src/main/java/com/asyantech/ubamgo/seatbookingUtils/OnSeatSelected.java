@@ -1,9 +1,9 @@
 package com.asyantech.ubamgo.seatbookingUtils;
 
-/**
- * Created by chandrasekar on 14/02/16.
- */
-public interface OnSeatSelected {
+import android.view.View;
 
-    void onSeatSelected(int count);
+import java.util.List;
+
+public interface OnSeatSelected {
+    void onSeatSelected(View view, int position, List<Integer> selected_position, int count);
 }

@@ -6,7 +6,6 @@ public class CenterItem extends AbstractItem {
         super(label);
     }
 
-
     @Override
     public int getType() {
         return TYPE_CENTER;

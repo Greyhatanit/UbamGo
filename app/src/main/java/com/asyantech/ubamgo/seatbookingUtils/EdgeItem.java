@@ -6,8 +6,6 @@ public class EdgeItem extends AbstractItem {
         super(label);
     }
 
-
-
     @Override
     public int getType() {
         return TYPE_EDGE;

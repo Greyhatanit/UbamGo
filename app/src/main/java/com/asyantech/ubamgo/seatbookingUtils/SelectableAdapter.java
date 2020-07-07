@@ -1,9 +1,7 @@
 package com.asyantech.ubamgo.seatbookingUtils;
 
 import android.util.SparseBooleanArray;
-
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.List;
 

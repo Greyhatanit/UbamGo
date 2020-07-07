@@ -41,12 +41,10 @@ public class AirplaneAdapter extends SelectableAdapter<RecyclerView.ViewHolder> 
         public EmptyViewHolder(View itemView) {
             super(itemView);
         }
-
     }
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
-
     private List<AbstractItem> mItems;
 
     public AirplaneAdapter(Context context, List<AbstractItem> items) {
@@ -91,11 +89,9 @@ public class AirplaneAdapter extends SelectableAdapter<RecyclerView.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     toggleSelection(position);
-
-                    mOnSeatSelected.onSeatSelected(getSelectedItemCount());
+                    mOnSeatSelected.onSeatSelected(v, position, getSelectedItems() ,getSelectedItemCount());
                 }
             });
-
             holder.imgSeatSelected.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
 
         } else if (type == AbstractItem.TYPE_EDGE) {
@@ -105,10 +101,9 @@ public class AirplaneAdapter extends SelectableAdapter<RecyclerView.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                 toggleSelection(position);
-                mOnSeatSelected.onSeatSelected(getSelectedItemCount());
+                mOnSeatSelected.onSeatSelected(v, position,getSelectedItems() ,getSelectedItemCount());
                 }
             });
-
             holder.imgSeatSelected.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
         }
     }
