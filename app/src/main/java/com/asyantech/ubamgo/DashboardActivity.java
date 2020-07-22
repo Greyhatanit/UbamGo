@@ -260,6 +260,7 @@ public class DashboardActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         if(firebaseUser != null){
+            //Error in this line too
             String firebaseSignInProvider = (String) firebaseUser.getIdToken(false).getResult().getSignInProvider();
             if(firebaseSignInProvider.equals("facebook.com") || firebaseSignInProvider.equals("google.com")){
                 verify_email_layout.setVisibility(View.GONE);

@@ -164,8 +164,6 @@ public class LoginActivity extends AppCompatActivity{
                         });
                     }
                 });
-
-
             }
         });
 
@@ -296,9 +294,9 @@ public class LoginActivity extends AppCompatActivity{
 
 
     /*
-        =======================
-        Facebook SIGN IN
-        =======================
+    =======================
+    Facebook SIGN IN
+    =======================
      */
     private void handleFacebookAccessToken(AccessToken token) {
         //Toast.makeText(this, "Facebook Token is "+token, Toast.LENGTH_SHORT).show();
@@ -322,7 +320,7 @@ public class LoginActivity extends AppCompatActivity{
     private void uploadUserToFirestore(FirebaseUser user) {
         progressBar.setVisibility(View.VISIBLE);
         if(user != null) {
-            String user_id = user.getUid();
+
             String photoUrl = user.getPhotoUrl().toString();
             String user_img = photoUrl + "?type=large";
             String user_name = user.getDisplayName();
